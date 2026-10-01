@@ -1,0 +1,50 @@
+.product-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.product-card--compact {
+  gap: 12px;
+}
+.product-card__media {
+  aspect-ratio: 4 / 5;
+  padding: 12%;
+  transition: background-color 0.25s;
+}
+.product-card:hover .product-card__media {
+  background: var(--color-neutral-300);
+}
+.product-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.product-card__name {
+  font-size: 16px;
+  font-weight: 600;
+}
+.product-card__kicker {
+  font-size: 13px;
+  color: var(--color-neutral-700);
+}
+.product-card__dots {
+  display: flex;
+  gap: 6px;
+  margin-top: 4px;
+}
+.product-card__dots span {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px var(--color-neutral-400);
+}
+
+/* Grilla de productos */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+  gap: 40px 12px;
+}
+.product-grid--related {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
+}

@@ -1,0 +1,27 @@
+.cat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.cat-card__media {
+  aspect-ratio: 1 / 1;
+}
+.cat-card__media img {
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.cat-card:hover .cat-card__media img {
+  transform: scale(1.03);
+}
+.cat-card__name {
+  font-size: 15px;
+  font-weight: 600;
+}
+.cat-card--wide {
+  gap: 14px;
+}
+.cat-card--wide .cat-card__media {
+  aspect-ratio: 4 / 3;
+}
+.cat-card--wide .cat-card__name {
+  font-size: 18px;
+}
