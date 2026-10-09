@@ -1,3 +1,4 @@
+import { Suspense, lazy } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import Header from './components/Header'
 import Footer from './components/Footer'
@@ -11,7 +12,26 @@ import NotFound from './pages/NotFound'
 import { useLang } from './context/lang'
 import { useQuote } from './context/quote'
 
+// El panel se carga aparte para no sumar peso al sitio público.
+const Admin = lazy(() => import('./admin/Admin'))
+
 export default function App() {
+  return (
+    <Routes>
+      <Route
+        path="/admin/*"
+        element={
+          <Suspense fallback={null}>
+            <Admin />
+          </Suspense>
+        }
+      />
+      <Route path="*" element={<Site />} />
+    </Routes>
+  )
+}
+
+function Site() {
   const { t } = useLang()
   const { isOpen } = useQuote()
 

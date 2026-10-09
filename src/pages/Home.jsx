@@ -1,13 +1,15 @@
 import { Link, useNavigate } from 'react-router-dom'
-import { CATEGORIES, FEATURED_PRODUCT, HOME_IMAGES, PRODUCTS, findCategory, pad } from '../data/catalog'
+import { CATEGORIES, FEATURED_PRODUCT, HOME_IMAGES, findCategory, pad } from '../data/catalog'
 import { useLang } from '../context/lang'
 import { useQuote } from '../context/quote'
+import { useCatalog } from '../context/catalog'
 import CategoryCard from '../components/CategoryCard'
 import ProductCard from '../components/ProductCard'
 import './Home.css'
 
 export default function Home() {
   const { t, label } = useLang()
+  const { featured } = useCatalog()
   const { open: openQuote } = useQuote()
   const navigate = useNavigate()
 
@@ -106,7 +108,7 @@ export default function Home() {
           </Link>
         </div>
         <div className="product-grid">
-          {PRODUCTS.map((p) => (
+          {featured.map((p) => (
             <ProductCard key={p.id} product={p} />
           ))}
         </div>

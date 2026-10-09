@@ -15,6 +15,8 @@ export const CATEGORIES = [
   { id: 'mesas', group: 'tables', en: 'Side & Coffee Tables', es: 'Mesas auxiliares y de centro', img: '2023/09/20220412113110_35675-1024x684.jpg' },
 ].map((c) => ({ ...c, img: UPLOADS + c.img }))
 
+// Respaldo estático y semilla de la base (scripts/db-setup.js). Los productos vivos
+// salen de /api/products y se editan en /admin.
 // [id, nombre, imagen principal, imagen secundaria]
 export const PRODUCTS = [
   ['tad', 'Tad', '2023/12/TAD-1.jpg', '2023/12/TAD.jpg'],
@@ -57,6 +59,7 @@ export const CONTACT = {
 }
 
 export const findCategory = (id) => CATEGORIES.find((c) => c.id === id)
-export const findProduct = (id) => PRODUCTS.find((p) => p.id === id)
-export const productsIn = (catId) => PRODUCTS.filter((p) => p.cat === catId)
+// Acabados que aplican a un producto (lista vacía en la base = todos).
+export const framesOf = (p) => (p.frames?.length ? FRAMES.filter((f) => p.frames.includes(f.id)) : FRAMES)
+export const uphsOf = (p) => (p.uphs?.length ? UPHOLSTERIES.filter((u) => p.uphs.includes(u.id)) : UPHOLSTERIES)
 export const pad = (n) => String(n).padStart(2, '0')

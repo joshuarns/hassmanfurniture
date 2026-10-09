@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
-import { FRAMES, UPHOLSTERIES, findProduct } from '../data/catalog'
+import { FRAMES, UPHOLSTERIES } from '../data/catalog'
+import { useCatalog } from '../context/catalog'
 import { useLang } from '../context/lang'
 import { useQuote } from '../context/quote'
 import useLockBody from '../hooks/useLockBody'
@@ -11,6 +12,7 @@ import './QuoteDrawer.css'
 export default function QuoteDrawer() {
   const { t, label } = useLang()
   const { items, remove, clear, close } = useQuote()
+  const { findProduct } = useCatalog()
   const [sentTo, setSentTo] = useState(null)
   const panelRef = useRef(null)
 
