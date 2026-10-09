@@ -1,5 +1,5 @@
 import { createHmac, timingSafeEqual } from 'node:crypto'
-import { fail } from './http.js'
+import { ConfigError, fail } from './http.js'
 
 // Sesión de administrador: cookie HttpOnly firmada con HMAC. Sin tabla de usuarios;
 // la contraseña vive en ADMIN_PASSWORD y la firma en SESSION_SECRET.
@@ -8,7 +8,7 @@ const MAX_AGE = 60 * 60 * 24 * 7
 
 const secret = () => {
   const s = process.env.SESSION_SECRET
-  if (!s || s.length < 32) throw new Error('SESSION_SECRET debe tener al menos 32 caracteres')
+  if (!s || s.length < 32) throw new ConfigError('falta SESSION_SECRET o tiene menos de 32 caracteres')
   return s
 }
 
@@ -22,7 +22,7 @@ const sameText = (a, b) => {
 
 export function checkPassword(password) {
   const expected = process.env.ADMIN_PASSWORD
-  if (!expected) throw new Error('Falta ADMIN_PASSWORD')
+  if (!expected) throw new ConfigError('falta ADMIN_PASSWORD')
   return typeof password === 'string' && sameText(password, expected)
 }
 
