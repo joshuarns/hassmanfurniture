@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { FRAMES, findCategory } from '../data/catalog'
+import { findCategory, framesOf } from '../data/catalog'
 import { useLang } from '../context/lang'
 import './ProductCard.css'
 
@@ -7,6 +7,7 @@ import './ProductCard.css'
 export default function ProductCard({ product, compact = false }) {
   const { t, label } = useLang()
   const cat = findCategory(product.cat)
+  const frames = framesOf(product)
 
   return (
     <Link to={`/producto/${product.id}`} className={`product-card ${compact ? 'product-card--compact' : ''}`}>
@@ -18,10 +19,10 @@ export default function ProductCard({ product, compact = false }) {
         {!compact && (
           <>
             <span className="product-card__kicker">
-              {label(cat)} · {t.finishes(FRAMES.length)}
+              {label(cat)} · {t.finishes(frames.length)}
             </span>
             <div className="product-card__dots" aria-hidden="true">
-              {FRAMES.map((f) => (
+              {frames.map((f) => (
                 <span key={f.id} style={{ background: f.color }} />
               ))}
             </div>

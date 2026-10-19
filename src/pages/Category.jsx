@@ -1,5 +1,6 @@
 import { Link, useParams } from 'react-router-dom'
-import { CATEGORIES, findCategory, productsIn } from '../data/catalog'
+import { CATEGORIES, findCategory } from '../data/catalog'
+import { useCatalog } from '../context/catalog'
 import { useLang } from '../context/lang'
 import { useQuote } from '../context/quote'
 import ProductCard from '../components/ProductCard'
@@ -10,6 +11,7 @@ export default function Category() {
   const { catId } = useParams()
   const { t, label } = useLang()
   const { open: openQuote } = useQuote()
+  const { productsIn, ready } = useCatalog()
   const cat = findCategory(catId)
 
   if (!cat) return <NotFound />
@@ -51,17 +53,19 @@ export default function Category() {
           ))}
         </div>
       ) : (
-        <div className="category__empty">
-          <div className="media category__empty-img">
-            <img src={cat.img} alt={label(cat)} />
+        ready && (
+          <div className="category__empty">
+            <div className="media category__empty-img">
+              <img src={cat.img} alt={label(cat)} />
+            </div>
+            <div className="category__empty-card">
+              <p>{t.cat_empty}</p>
+              <button type="button" className="btn btn-primary" onClick={openQuote}>
+                {t.cta_catalogue}
+              </button>
+            </div>
           </div>
-          <div className="category__empty-card">
-            <p>{t.cat_empty}</p>
-            <button type="button" className="btn btn-primary" onClick={openQuote}>
-              {t.cta_catalogue}
-            </button>
-          </div>
-        </div>
+        )
       )}
     </section>
   )

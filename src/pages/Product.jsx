@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { FRAMES, UPHOLSTERIES, findCategory, findProduct, productsIn } from '../data/catalog'
+import { findCategory, framesOf, uphsOf } from '../data/catalog'
+import { useCatalog } from '../context/catalog'
 import { useLang } from '../context/lang'
 import { useQuote } from '../context/quote'
 import ProductCard from '../components/ProductCard'
@@ -9,25 +10,29 @@ import './Product.css'
 
 export default function Product() {
   const { prodId } = useParams()
+  const { findProduct, ready } = useCatalog()
   const product = findProduct(prodId)
-  if (!product) return <NotFound />
+  if (!product) return ready ? <NotFound /> : <section className="container page" style={{ minHeight: '60vh' }} aria-busy="true" />
   // `key` reinicia la configuración al cambiar de producto.
   return <ProductView key={product.id} product={product} />
 }
 
 function ProductView({ product }) {
-  const { t, label } = useLang()
+  const { t, lang, label } = useLang()
   const quote = useQuote()
+  const { productsIn } = useCatalog()
+  const frames = framesOf(product)
+  const uphs = uphsOf(product)
   const cat = findCategory(product.cat)
 
   const [img, setImg] = useState(0)
-  const [frame, setFrame] = useState(FRAMES[0].id)
-  const [uph, setUph] = useState(UPHOLSTERIES[0].id)
+  const [frame, setFrame] = useState(frames[0].id)
+  const [uph, setUph] = useState(uphs[0].id)
   const [qty, setQty] = useState(1)
   const [justAdded, setJustAdded] = useState(false)
 
-  const frameObj = FRAMES.find((f) => f.id === frame)
-  const uphObj = UPHOLSTERIES.find((u) => u.id === uph)
+  const frameObj = frames.find((f) => f.id === frame)
+  const uphObj = uphs.find((u) => u.id === uph)
   const related = productsIn(product.cat)
     .filter((p) => p.id !== product.id)
     .slice(0, 4)
@@ -35,8 +40,9 @@ function ProductView({ product }) {
   const details = [
     [t.d_cat, label(cat)],
     [t.d_coll, product.name],
-    [t.d_fin, t.d_fin_v],
-  ]
+    [t.d_fin, t.d_fin_v(frames.length, uphs.length)],
+    product.sku && ['SKU', product.sku],
+  ].filter(Boolean)
 
   const addToQuote = () => {
     quote.add({ prod: product.id, frame, uph, qty })
@@ -81,7 +87,7 @@ function ProductView({ product }) {
                 {label(cat)} — {t.collection}
               </span>
               <h1>{product.name}</h1>
-              <p>{t.desc(product.name)}</p>
+              <p>{product.desc?.[lang] || t.desc(product.name)}</p>
             </div>
 
             <div className="product__option">
@@ -90,7 +96,7 @@ function ProductView({ product }) {
                 <span>{label(frameObj)}</span>
               </div>
               <div className="product__swatches">
-                {FRAMES.map((f) => (
+                {frames.map((f) => (
                   <button
                     key={f.id}
                     type="button"
@@ -114,7 +120,7 @@ function ProductView({ product }) {
                 <span>{label(uphObj)}</span>
               </div>
               <div className="product__uphs">
-                {UPHOLSTERIES.map((u) => (
+                {uphs.map((u) => (
                   <button
                     key={u.id}
                     type="button"
