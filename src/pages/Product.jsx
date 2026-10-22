@@ -5,6 +5,7 @@ import { useLang } from '../context/lang'
 import { useQuote } from '../context/quote'
 import ProductCard from '../components/ProductCard'
 import NotFound from './NotFound'
+import './Page.css'
 import './Product.css'
 
 export default function Product() {
@@ -20,17 +21,22 @@ function ProductView({ product }) {
   const quote = useQuote()
   const cat = findCategory(product.cat)
 
-  const [img, setImg] = useState(0)
   const [frame, setFrame] = useState(FRAMES[0].id)
   const [uph, setUph] = useState(UPHOLSTERIES[0].id)
   const [qty, setQty] = useState(1)
   const [justAdded, setJustAdded] = useState(false)
 
+  const siblings = productsIn(product.cat)
+  const idx = siblings.findIndex((p) => p.id === product.id)
+  const prev = siblings[(idx - 1 + siblings.length) % siblings.length]
+  const next = siblings[(idx + 1) % siblings.length]
+  const related = siblings.filter((p) => p.id !== product.id).slice(0, 5)
+
   const frameObj = FRAMES.find((f) => f.id === frame)
-  const uphObj = UPHOLSTERIES.find((u) => u.id === uph)
-  const related = productsIn(product.cat)
-    .filter((p) => p.id !== product.id)
-    .slice(0, 4)
+  const pick = (setter) => (value) => {
+    setter(value)
+    setJustAdded(false)
+  }
 
   const details = [
     [t.d_cat, label(cat)],
@@ -38,58 +44,30 @@ function ProductView({ product }) {
     [t.d_fin, t.d_fin_v],
   ]
 
-  const addToQuote = () => {
-    quote.add({ prod: product.id, frame, uph, qty })
-    setJustAdded(true)
-  }
-
   return (
     <>
-      <section className="container product">
-        <nav className="breadcrumbs product__crumbs" aria-label="Breadcrumb">
-          <Link to="/">{t.home}</Link>
-          <span>›</span>
-          <Link to="/colecciones">{t.coll_title}</Link>
-          <span>›</span>
-          <Link to={`/colecciones/${cat.id}`}>{label(cat)}</Link>
-        </nav>
+      <header className="page-head">
+        <Link to={`/colecciones/${cat.id}`} className="back">
+          ‹ {label(cat)}
+        </Link>
+        <h1 className="t-page">{product.name}</h1>
+        <p className="t-lead">{t.desc(product.name)}</p>
+      </header>
 
-        <div className="product__layout">
-          <div className="product__gallery">
-            <div className="media media--contain product__main">
-              <img src={product.imgs[img] || product.imgs[0]} alt={product.name} />
+      <div className="wrap">
+        <div className="pd__gallery">
+          {product.imgs.map((src, i) => (
+            <div key={src} className={`ph pd__img ${i > 0 ? 'pd__img--sheet' : ''}`}>
+              <img src={src} alt={i === 0 ? product.name : ''} />
             </div>
-            <div className="product__thumbs">
-              {product.imgs.map((src, i) => (
-                <button
-                  key={src}
-                  type="button"
-                  className="media media--contain product__thumb"
-                  aria-pressed={i === img}
-                  aria-label={`${product.name} ${i + 1}`}
-                  onClick={() => setImg(i)}
-                >
-                  <img src={src} alt="" />
-                </button>
-              ))}
-            </div>
-          </div>
+          ))}
+        </div>
 
-          <div className="product__panel">
-            <div className="product__intro">
-              <span className="kicker">
-                {label(cat)} — {t.collection}
-              </span>
-              <h1>{product.name}</h1>
-              <p>{t.desc(product.name)}</p>
-            </div>
-
-            <div className="product__option">
-              <div className="product__option-label">
-                <span>{t.frame}.</span>
-                <span>{label(frameObj)}</span>
-              </div>
-              <div className="product__swatches">
+        <section className="pd__config" aria-label={t.add}>
+          <div className="pd__row">
+            <span className="pd__key">{t.frame}</span>
+            <div className="pd__val">
+              <div className="pd__swatches">
                 {FRAMES.map((f) => (
                   <button
                     key={f.id}
@@ -99,83 +77,95 @@ function ProductView({ product }) {
                     title={label(f)}
                     aria-label={label(f)}
                     aria-pressed={f.id === frame}
-                    onClick={() => {
-                      setFrame(f.id)
-                      setJustAdded(false)
-                    }}
+                    onClick={() => pick(setFrame)(f.id)}
                   />
                 ))}
               </div>
+              <span className="pd__chosen">{label(frameObj)}</span>
             </div>
+          </div>
 
-            <div className="product__option">
-              <div className="product__option-label">
-                <span>{t.upholstery}.</span>
-                <span>{label(uphObj)}</span>
-              </div>
-              <div className="product__uphs">
-                {UPHOLSTERIES.map((u) => (
-                  <button
-                    key={u.id}
-                    type="button"
-                    className="uph"
-                    aria-pressed={u.id === uph}
-                    onClick={() => {
-                      setUph(u.id)
-                      setJustAdded(false)
-                    }}
-                  >
-                    {label(u)}
-                  </button>
-                ))}
-              </div>
+          <div className="pd__row">
+            <span className="pd__key">{t.upholstery}</span>
+            <div className="pd__val pd__opts">
+              {UPHOLSTERIES.map((u) => (
+                <button key={u.id} type="button" className="tab" aria-pressed={u.id === uph} onClick={() => pick(setUph)(u.id)}>
+                  {label(u)}
+                </button>
+              ))}
             </div>
+          </div>
 
-            <div className="product__buy">
-              <div className="qty">
-                <button type="button" aria-label="−" onClick={() => setQty((q) => Math.max(1, q - 1))}>
-                  −
-                </button>
-                <span aria-live="polite">{qty}</span>
-                <button type="button" aria-label="+" onClick={() => setQty((q) => Math.min(99, q + 1))}>
-                  +
-                </button>
-              </div>
-              <button type="button" className="btn btn-primary btn-start product__add" onClick={addToQuote}>
-                {t.add}
+          <div className="pd__row">
+            <span className="pd__key">{t.quantity}</span>
+            <div className="pd__val qty">
+              <button type="button" aria-label="−" onClick={() => setQty((q) => Math.max(1, q - 1))}>
+                −
+              </button>
+              <span className="tnum" aria-live="polite">
+                {qty}
+              </span>
+              <button type="button" aria-label="+" onClick={() => setQty((q) => Math.min(99, q + 1))}>
+                +
               </button>
             </div>
+          </div>
 
+          <div className="pd__actions">
+            <button
+              type="button"
+              className="btn"
+              onClick={() => {
+                quote.add({ prod: product.id, frame, uph, qty })
+                setJustAdded(true)
+              }}
+            >
+              {t.add}
+            </button>
             {justAdded && (
-              <button type="button" className="link-accent product__added" onClick={quote.open}>
-                {t.added} ›
+              <button type="button" className="link-line" onClick={quote.open}>
+                {t.added}
               </button>
             )}
-
-            <dl className="product__details">
-              {details.map(([k, v]) => (
-                <div key={k}>
-                  <dt>{k}</dt>
-                  <dd>{v}</dd>
-                </div>
-              ))}
-            </dl>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {related.length > 0 && (
-        <section className="container product-related">
-          <div className="section-head section-head--sm">
-            <h2>{t.related(label(cat))}</h2>
-            <Link to={`/colecciones/${cat.id}`} className="link-accent">
-              {t.view_all} ›
+        <section className="pd__specs">
+          <div className="pd__specs-head">
+            <h2>{t.specs}</h2>
+            <Link to={`/colecciones/${cat.id}`} className="link-arrow">
+              {t.view_cat} ›
             </Link>
           </div>
-          <div className="product-grid product-grid--related">
-            {related.map((p) => (
-              <ProductCard key={p.id} product={p} compact />
+          <dl>
+            {details.map(([k, v]) => (
+              <div key={k}>
+                <dt>{k}</dt>
+                <dd>{v}</dd>
+              </div>
             ))}
+          </dl>
+        </section>
+
+        {siblings.length > 1 && (
+          <nav className="pd__pager ui" aria-label={label(cat)}>
+            <Link to={`/producto/${prev.id}`}>‹ {prev.name}</Link>
+            <Link to={`/producto/${next.id}`}>{next.name} ›</Link>
+          </nav>
+        )}
+      </div>
+
+      {related.length > 0 && (
+        <section className="section pd__related">
+          <div className="section-head">
+            <h2 className="t-title">{t.related(label(cat))}</h2>
+          </div>
+          <div className="wrap">
+            <div className="grid-products grid-products--5">
+              {related.map((p) => (
+                <ProductCard key={p.id} product={p} />
+              ))}
+            </div>
           </div>
         </section>
       )}

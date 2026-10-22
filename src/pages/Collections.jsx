@@ -1,44 +1,44 @@
 import { useState } from 'react'
-import { CATEGORIES, GROUPS, pad } from '../data/catalog'
+import { CATEGORIES, GROUPS } from '../data/catalog'
 import { useLang } from '../context/lang'
-import CategoryCard from '../components/CategoryCard'
-import './Collections.css'
+import CategoryPanel from '../components/CategoryPanel'
+import './Page.css'
 
 export default function Collections() {
   const { t } = useLang()
   const [filter, setFilter] = useState('all')
 
-  const filters = [
-    ['all', t.all, CATEGORIES.length],
-    ...GROUPS.map((g) => [g, t[g], CATEGORIES.filter((c) => c.group === g).length]),
-  ]
   const shown = GROUPS.filter((g) => filter === 'all' || g === filter)
 
   return (
-    <section className="container page collections">
-      <h1 className="page-title">{t.coll_title}</h1>
+    <>
+      <header className="page-head">
+        <h1 className="t-page">{t.coll_title}</h1>
+        <p className="t-lead">{t.coll_lead}</p>
+      </header>
 
-      <div className="collections__filters">
-        {filters.map(([id, name, n]) => (
-          <button key={id} type="button" className="chip" aria-pressed={filter === id} onClick={() => setFilter(id)}>
-            {name}
-            <span className="chip__count">{pad(n)}</span>
+      <div className="tabs" role="group" aria-label={t.categories}>
+        {['all', ...GROUPS].map((id) => (
+          <button key={id} type="button" className="tab" aria-pressed={filter === id} onClick={() => setFilter(id)}>
+            {t[id]}
           </button>
         ))}
       </div>
 
-      <div className="collections__groups">
+      <div className="wrap page-body">
         {shown.map((g) => (
-          <div key={g} className="collections__group">
-            <h2>{t[g]}</h2>
-            <div className="collections__grid">
+          <section key={g} className="group">
+            <div className="section-head">
+              <h2 className="t-title">{t[g]}</h2>
+            </div>
+            <div className="grid-panels">
               {CATEGORIES.filter((c) => c.group === g).map((c) => (
-                <CategoryCard key={c.id} category={c} variant="wide" />
+                <CategoryPanel key={c.id} category={c} />
               ))}
             </div>
-          </div>
+          </section>
         ))}
       </div>
-    </section>
+    </>
   )
 }

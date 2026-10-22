@@ -1,0 +1,56 @@
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+.menu__group {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.menu__group .caps {
+  font-size: 10px;
+  margin-bottom: 2px;
+}
+.menu__item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.menu__name {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: 26px;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+.menu__sub {
+  font-size: 12px;
+  color: var(--muted);
+}
+.menu__item:hover .menu__sub {
+  color: var(--accent);
+}
+.menu__group--plain {
+  gap: 10px;
+  padding-top: 28px;
+  border-top: 1px solid var(--line);
+}
+.menu__langs {
+  display: flex;
+  gap: 16px;
+}
+.menu__langs button {
+  min-height: 44px;
+  padding: 0;
+  background: none;
+  border: 0;
+  font: inherit;
+  letter-spacing: inherit;
+  color: var(--muted);
+  cursor: pointer;
+}
+.menu__langs button[aria-pressed='true'] {
+  color: var(--ink);
+  border-bottom: 1px solid var(--ink);
+}

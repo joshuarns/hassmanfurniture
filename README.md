@@ -1,7 +1,8 @@
 # Hassman Furniture
 
 Sitio de catálogo con solicitud de cotización, bilingüe (ES/EN). React 19 + Vite + React Router.
-Basado en el diseño "Hassman Home v2" (design system Modernist: Archivo, rojo `#ec3013` sobre gris claro).
+Diseño en la línea de Indigoff: blanco, tinta `#111` y crema `#f4f1eb`, cero radios, Archivo ligero para títulos,
+IBM Plex Sans para texto y Jost en versalitas para la interfaz.
 
 ```bash
 npm install
@@ -24,7 +25,7 @@ npm run build    # genera /dist para publicar
 | --- | --- |
 | Categorías, productos, acabados, correo y redes | `src/data/catalog.js` |
 | Textos en español e inglés | `src/i18n/translations.js` |
-| Colores, tipografía, radios | variables en `:root` de `src/index.css` |
+| Colores, tipografía, espaciados | variables en `:root` de `src/index.css` |
 
 Las imágenes se cargan desde `hassmanfurniture.com/wp-content/uploads/`.
 
@@ -37,7 +38,7 @@ conectar en `onSubmit` de `src/components/QuoteDrawer.jsx` (hay un `TODO`).
 
 ```
 src/
-  components/   Header (mega menú), Footer, QuoteDrawer, ProductCard, CategoryCard
+  components/   Header, MenuDrawer, Drawer, Footer, QuoteDrawer, ProductCard, CategoryPanel
   pages/        Home, Collections, Category, Product, NotFound
   context/      idioma (LangProvider) y cotización (QuoteProvider)
   data/         catálogo editable

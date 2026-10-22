@@ -17,7 +17,7 @@ export default function App() {
 
   return (
     <>
-      <a href="#contenido" className="sr-only">
+      <a href="#contenido" className="skip">
         {t.skip}
       </a>
       <ScrollManager />

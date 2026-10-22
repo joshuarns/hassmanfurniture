@@ -80,3 +80,25 @@ export const T = {
     not_found: 'We couldn’t find this page.',
   },
 }
+
+// Textos del rediseño (línea Indigoff).
+Object.assign(T.es, {
+  menu: 'Menú', categories: 'Categorías', explore: 'Explorar', all_coll: 'Todas las colecciones',
+  coll_lead: 'Sillería y mesas para corporativos, hoteles y residencias.',
+  seat_title: 'Cada espacio. Una pieza.',
+  tables_title: 'Mesas que marcan el tono.',
+  tad_body: 'Sillería de oficina, reducida a lo esencial. Cuatro estructuras y tres tapicerías para configurarla a tu proyecto.',
+  studio_title: 'Forma pensada, materiales nobles.',
+  close_lead: 'Nuestro equipo te compartirá modelos, acabados y precios por proyecto.',
+  quantity: 'Cantidad', specs: 'Ficha técnica', view_cat: 'Ver categoría', pieces: (n) => n + (n === 1 ? ' pieza' : ' piezas'),
+})
+Object.assign(T.en, {
+  menu: 'Menu', categories: 'Categories', explore: 'Explore', all_coll: 'All collections',
+  coll_lead: 'Seating and tables for headquarters, hotels and residences.',
+  seat_title: 'Every space. One piece.',
+  tables_title: 'Tables that set the tone.',
+  tad_body: 'Office seating, refined to the essentials. Four frames and three upholsteries to configure it for your project.',
+  studio_title: 'Considered form, noble materials.',
+  close_lead: 'Our team will share models, finishes and project pricing.',
+  quantity: 'Quantity', specs: 'Specifications', view_cat: 'View category', pieces: (n) => n + (n === 1 ? ' piece' : ' pieces'),
+})

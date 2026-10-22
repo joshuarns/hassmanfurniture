@@ -1,0 +1,88 @@
+.dw-back {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  background: rgba(17, 17, 17, 0.38);
+  animation: dw-fade 0.35s ease;
+}
+.dw {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  z-index: 81;
+  width: min(460px, 100%);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--bg);
+  color: var(--ink);
+}
+.dw:focus {
+  outline: none;
+}
+.dw--left {
+  left: 0;
+  box-shadow: 24px 0 48px -32px rgba(17, 17, 17, 0.4);
+  animation: dw-in-left 0.5s var(--ease);
+}
+.dw--right {
+  right: 0;
+  width: min(520px, 100%);
+  box-shadow: -24px 0 48px -32px rgba(17, 17, 17, 0.4);
+  animation: dw-in-right 0.5s var(--ease);
+}
+@keyframes dw-fade {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes dw-in-left {
+  from {
+    transform: translateX(-100%);
+  }
+}
+@keyframes dw-in-right {
+  from {
+    transform: translateX(100%);
+  }
+}
+
+.dw__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 72px;
+  padding: 0 32px;
+  border-bottom: 1px solid var(--line);
+}
+.dw__close {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 0;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+.dw__close span {
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1;
+}
+.dw__close:hover {
+  color: var(--accent);
+}
+.dw__body {
+  padding: 32px;
+}
+
+@media (max-width: 520px) {
+  .dw__head,
+  .dw__body {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}

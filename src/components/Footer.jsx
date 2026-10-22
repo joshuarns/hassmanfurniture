@@ -7,16 +7,16 @@ export default function Footer() {
   const { t, label } = useLang()
 
   return (
-    <footer id="contacto" className="footer">
-      <div className="container footer__inner">
-        <div className="footer__grid">
-          <div className="footer__col">
+    <footer id="contacto" className="ft">
+      <div className="wrap ft__inner">
+        <div className="ft__cols">
+          <div className="ft__col ft__col--brand">
             <span className="brand">HASSMAN</span>
-            <span className="footer__muted">{t.footer_tag}</span>
+            <p>{t.footer_tag}</p>
           </div>
           {GROUPS.map((g) => (
-            <div key={g} className="footer__col">
-              <span className="footer__title">{t[g]}</span>
+            <div key={g} className="ft__col">
+              <span className="ft__label">{t[g]}</span>
               {CATEGORIES.filter((c) => c.group === g).map((c) => (
                 <Link key={c.id} to={`/colecciones/${c.id}`}>
                   {label(c)}
@@ -24,8 +24,8 @@ export default function Footer() {
               ))}
             </div>
           ))}
-          <div className="footer__col">
-            <span className="footer__title">{t.footer_contact}</span>
+          <div className="ft__col">
+            <span className="ft__label">{t.footer_contact}</span>
             <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>
             {CONTACT.socials.map((s) => (
               <a key={s.label} href={s.href} target="_blank" rel="noreferrer">
@@ -34,7 +34,7 @@ export default function Footer() {
             ))}
           </div>
         </div>
-        <div className="footer__bottom">
+        <div className="ft__bottom">
           <span>{t.rights}</span>
           <span>{t.meta3}</span>
         </div>
