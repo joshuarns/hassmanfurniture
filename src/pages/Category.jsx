@@ -1,5 +1,6 @@
 import { Link, useParams } from 'react-router-dom'
-import { CATEGORIES, findCategory, productsIn } from '../data/catalog'
+import { CATEGORIES, findCategory } from '../data/catalog'
+import { useCatalog } from '../context/catalog'
 import { useLang } from '../context/lang'
 import { useQuote } from '../context/quote'
 import ProductCard from '../components/ProductCard'
@@ -10,6 +11,7 @@ export default function Category() {
   const { catId } = useParams()
   const { t, label } = useLang()
   const { open: openQuote } = useQuote()
+  const { productsIn, ready } = useCatalog()
   const cat = findCategory(catId)
 
   if (!cat) return <NotFound />
@@ -43,6 +45,7 @@ export default function Category() {
           </div>
         </div>
       ) : (
+        ready && (
         <div className="page-body">
           <div className="split">
             <div className="split__img ph">
@@ -58,6 +61,7 @@ export default function Category() {
             </div>
           </div>
         </div>
+        )
       )}
     </>
   )

@@ -5,14 +5,17 @@ import './index.css'
 import App from './App.jsx'
 import LangProvider from './context/LangProvider'
 import QuoteProvider from './context/QuoteProvider'
+import CatalogProvider from './context/CatalogProvider'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
       <LangProvider>
-        <QuoteProvider>
-          <App />
-        </QuoteProvider>
+        <CatalogProvider>
+          <QuoteProvider>
+            <App />
+          </QuoteProvider>
+        </CatalogProvider>
       </LangProvider>
     </BrowserRouter>
   </StrictMode>,

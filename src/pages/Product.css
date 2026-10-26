@@ -15,7 +15,31 @@
 .pd__img--sheet img {
   object-fit: contain;
 }
+.pd__gallery--single {
+  grid-template-columns: minmax(0, 720px);
+  justify-content: center;
+}
+.pd__extra {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--gap);
+  margin-top: var(--gap);
+}
+.pd__swatches--wrap {
+  flex-wrap: wrap;
+  max-width: 420px;
+}
+.swatch--sm {
+  width: 28px;
+  height: 28px;
+}
+.pd__pdf {
+  margin-top: 24px;
+}
 @media (max-width: 760px) {
+  .pd__extra {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
   .pd__gallery {
     grid-template-columns: 1fr;
   }

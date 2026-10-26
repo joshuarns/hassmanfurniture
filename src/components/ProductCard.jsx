@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { FRAMES } from '../data/catalog'
+import { framesOf } from '../data/catalog'
 import { useLang } from '../context/lang'
 import './ProductCard.css'
 
@@ -15,7 +15,7 @@ export default function ProductCard({ product, variant = 'grid' }) {
       {variant === 'feature' ? (
         <div className="pc__info">
           <span className="pc__name">{product.name}</span>
-          <span className="pc__sub">{t.finishes(FRAMES.length)}</span>
+          <span className="pc__sub">{t.finishes(framesOf(product).length)}</span>
         </div>
       ) : (
         <span className="pc__caption">{product.name}</span>

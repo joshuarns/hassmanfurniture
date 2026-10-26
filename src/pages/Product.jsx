@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { FRAMES, UPHOLSTERIES, findCategory, findProduct, productsIn } from '../data/catalog'
+import { findCategory, framesOf, uphsOf } from '../data/catalog'
+import { useCatalog } from '../context/catalog'
 import { useLang } from '../context/lang'
 import { useQuote } from '../context/quote'
 import ProductCard from '../components/ProductCard'
@@ -10,19 +11,27 @@ import './Product.css'
 
 export default function Product() {
   const { prodId } = useParams()
+  const { findProduct, ready } = useCatalog()
   const product = findProduct(prodId)
-  if (!product) return <NotFound />
+  if (!product) return ready ? <NotFound /> : <div className="page-head" style={{ minHeight: '60vh' }} aria-busy="true" />
   // `key` reinicia la configuración al cambiar de producto.
   return <ProductView key={product.id} product={product} />
 }
 
 function ProductView({ product }) {
-  const { t, label } = useLang()
+  const { t, lang, label } = useLang()
   const quote = useQuote()
+  const { productsIn } = useCatalog()
   const cat = findCategory(product.cat)
+  const frames = framesOf(product)
+  const uphs = uphsOf(product)
+  const variants = product.variants || []
+  const colors = product.colors || []
 
-  const [frame, setFrame] = useState(FRAMES[0].id)
-  const [uph, setUph] = useState(UPHOLSTERIES[0].id)
+  const [variant, setVariant] = useState(variants[0]?.id ?? null)
+  const [frame, setFrame] = useState(frames[0].id)
+  const [uph, setUph] = useState(uphs[0].id)
+  const [color, setColor] = useState(colors.length ? 0 : null)
   const [qty, setQty] = useState(1)
   const [justAdded, setJustAdded] = useState(false)
 
@@ -32,7 +41,14 @@ function ProductView({ product }) {
   const next = siblings[(idx + 1) % siblings.length]
   const related = siblings.filter((p) => p.id !== product.id).slice(0, 5)
 
-  const frameObj = FRAMES.find((f) => f.id === frame)
+  const frameObj = frames.find((f) => f.id === frame)
+  const variantObj = variants.find((v) => v.id === variant)
+
+  // Foto principal (la del modelo elegido) + ficha en imagen, o la 2.ª imagen como en el catálogo original.
+  const sheetIsPdf = /\.pdf($|\?)/i.test(product.sheet || '')
+  const mainImg = variantObj?.img || product.imgs[0]
+  const sideImg = (!sheetIsPdf && product.sheet) || product.imgs[1] || null
+  const extraImgs = product.imgs.slice(1).filter((src) => src !== sideImg && src !== mainImg)
   const pick = (setter) => (value) => {
     setter(value)
     setJustAdded(false)
@@ -41,8 +57,10 @@ function ProductView({ product }) {
   const details = [
     [t.d_cat, label(cat)],
     [t.d_coll, product.name],
-    [t.d_fin, t.d_fin_v],
-  ]
+    [t.d_fin, t.d_fin_v(frames.length, uphs.length)],
+    ...(product.specs || []).map((s) => [label(s.k), label(s.v)]),
+    product.sku && ['SKU', product.sku],
+  ].filter(Boolean)
 
   return (
     <>
@@ -51,24 +69,49 @@ function ProductView({ product }) {
           ‹ {label(cat)}
         </Link>
         <h1 className="t-page">{product.name}</h1>
-        <p className="t-lead">{t.desc(product.name)}</p>
+        <p className="t-lead">{product.desc?.[lang] || t.desc(product.name)}</p>
       </header>
 
       <div className="wrap">
-        <div className="pd__gallery">
-          {product.imgs.map((src, i) => (
-            <div key={src} className={`ph pd__img ${i > 0 ? 'pd__img--sheet' : ''}`}>
-              <img src={src} alt={i === 0 ? product.name : ''} />
+        <div className={`pd__gallery ${sideImg ? '' : 'pd__gallery--single'}`}>
+          <div className="ph pd__img">
+            <img key={mainImg} src={mainImg} alt={variantObj?.name || product.name} />
+          </div>
+          {sideImg && (
+            <div className="ph pd__img pd__img--sheet">
+              <img src={sideImg} alt={product.sheet ? t.sheet : ''} />
             </div>
-          ))}
+          )}
         </div>
+        {extraImgs.length > 0 && (
+          <div className="pd__extra">
+            {extraImgs.map((src) => (
+              <div key={src} className="ph pd__img">
+                <img src={src} alt="" loading="lazy" />
+              </div>
+            ))}
+          </div>
+        )}
 
         <section className="pd__config" aria-label={t.add}>
+          {variants.length > 0 && (
+            <div className="pd__row">
+              <span className="pd__key">{t.model}</span>
+              <div className="pd__val pd__opts">
+                {variants.map((v) => (
+                  <button key={v.id} type="button" className="tab" aria-pressed={v.id === variant} onClick={() => pick(setVariant)(v.id)}>
+                    {v.name}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
           <div className="pd__row">
             <span className="pd__key">{t.frame}</span>
             <div className="pd__val">
               <div className="pd__swatches">
-                {FRAMES.map((f) => (
+                {frames.map((f) => (
                   <button
                     key={f.id}
                     type="button"
@@ -88,13 +131,36 @@ function ProductView({ product }) {
           <div className="pd__row">
             <span className="pd__key">{t.upholstery}</span>
             <div className="pd__val pd__opts">
-              {UPHOLSTERIES.map((u) => (
+              {uphs.map((u) => (
                 <button key={u.id} type="button" className="tab" aria-pressed={u.id === uph} onClick={() => pick(setUph)(u.id)}>
                   {label(u)}
                 </button>
               ))}
             </div>
           </div>
+
+          {colors.length > 0 && (
+            <div className="pd__row">
+              <span className="pd__key">{t.color}</span>
+              <div className="pd__val">
+                <div className="pd__swatches pd__swatches--wrap">
+                  {colors.map((c, i) => (
+                    <button
+                      key={i}
+                      type="button"
+                      className="swatch swatch--sm"
+                      style={{ background: c.hex }}
+                      title={label(c.name)}
+                      aria-label={label(c.name)}
+                      aria-pressed={i === color}
+                      onClick={() => pick(setColor)(i)}
+                    />
+                  ))}
+                </div>
+                <span className="pd__chosen">{colors[color] && label(colors[color].name)}</span>
+              </div>
+            </div>
+          )}
 
           <div className="pd__row">
             <span className="pd__key">{t.quantity}</span>
@@ -116,7 +182,7 @@ function ProductView({ product }) {
               type="button"
               className="btn"
               onClick={() => {
-                quote.add({ prod: product.id, frame, uph, qty })
+                quote.add({ prod: product.id, variant, frame, uph, color, qty })
                 setJustAdded(true)
               }}
             >
@@ -145,6 +211,11 @@ function ProductView({ product }) {
               </div>
             ))}
           </dl>
+          {sheetIsPdf && (
+            <a href={product.sheet} className="link-line pd__pdf" target="_blank" rel="noreferrer">
+              {t.sheet_pdf}
+            </a>
+          )}
         </section>
 
         {siblings.length > 1 && (

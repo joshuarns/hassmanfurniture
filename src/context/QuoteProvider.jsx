@@ -12,7 +12,7 @@ function readItems() {
   }
 }
 
-// Lista de piezas a cotizar: { prod, frame, uph, qty }. Se guarda en localStorage.
+// Lista de piezas a cotizar: { prod, variant, frame, uph, color, qty } (variant y color pueden ser null). Se guarda en localStorage.
 export default function QuoteProvider({ children }) {
   const [items, setItems] = useState(readItems)
   const [isOpen, setOpen] = useState(false)
@@ -27,7 +27,8 @@ export default function QuoteProvider({ children }) {
 
   const add = useCallback((item) => {
     setItems((list) => {
-      const i = list.findIndex((q) => q.prod === item.prod && q.frame === item.frame && q.uph === item.uph)
+      const same = (q) => ['prod', 'variant', 'frame', 'uph', 'color'].every((k) => (q[k] ?? null) === (item[k] ?? null))
+      const i = list.findIndex(same)
       if (i < 0) return [...list, item]
       const next = [...list]
       next[i] = { ...next[i], qty: next[i].qty + item.qty }

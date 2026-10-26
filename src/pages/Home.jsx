@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
-import { CATEGORIES, FEATURED_PRODUCT, HOME_IMAGES, PRODUCTS, findCategory } from '../data/catalog'
+import { CATEGORIES, FEATURED_PRODUCT, HOME_IMAGES, findCategory } from '../data/catalog'
+import { useCatalog } from '../context/catalog'
 import { useLang } from '../context/lang'
 import { useQuote } from '../context/quote'
 import CategoryPanel from '../components/CategoryPanel'
@@ -9,6 +10,7 @@ import './Home.css'
 export default function Home() {
   const { t } = useLang()
   const { open: openQuote } = useQuote()
+  const { featured } = useCatalog()
 
   const seating = CATEGORIES.filter((c) => c.group === 'seating')
   const tables = ['juntas', 'escritorios', 'mesas'].map(findCategory)
@@ -53,7 +55,7 @@ export default function Home() {
         </div>
         <div className="wrap">
           <div className="grid-products">
-            {PRODUCTS.map((p) => (
+            {featured.map((p) => (
               <ProductCard key={p.id} product={p} variant="feature" />
             ))}
           </div>

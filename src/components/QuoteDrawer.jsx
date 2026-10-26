@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { FRAMES, UPHOLSTERIES, findProduct } from '../data/catalog'
+import { FRAMES, UPHOLSTERIES } from '../data/catalog'
+import { useCatalog } from '../context/catalog'
 import { useLang } from '../context/lang'
 import { useQuote } from '../context/quote'
 import Drawer from './Drawer'
@@ -10,6 +11,7 @@ import './QuoteDrawer.css'
 export default function QuoteDrawer() {
   const { t, label } = useLang()
   const { items, count, remove, clear, close } = useQuote()
+  const { findProduct } = useCatalog()
   const [sentTo, setSentTo] = useState(null)
 
   const onSubmit = (e) => {
@@ -42,16 +44,17 @@ export default function QuoteDrawer() {
                   if (!p) return null
                   const frame = FRAMES.find((f) => f.id === q.frame)
                   const uph = UPHOLSTERIES.find((u) => u.id === q.uph)
+                  const variant = p.variants?.find((v) => v.id === q.variant)
+                  const color = p.colors?.[q.color]
+                  const detail = [variant?.name, frame && label(frame), uph && label(uph), color && label(color.name), `× ${q.qty}`].filter(Boolean).join(' · ')
                   return (
-                    <li key={`${q.prod}-${q.frame}-${q.uph}`} className="qd__item">
+                    <li key={`${q.prod}-${q.variant}-${q.frame}-${q.uph}-${q.color}`} className="qd__item">
                       <div className="ph qd__thumb">
-                        <img src={p.imgs[0]} alt="" />
+                        <img src={variant?.img || p.imgs[0]} alt="" />
                       </div>
                       <div className="qd__info">
                         <span className="qd__name">{p.name}</span>
-                        <span className="qd__detail">
-                          {frame && label(frame)} · {uph && label(uph)} · × {q.qty}
-                        </span>
+                        <span className="qd__detail">{detail}</span>
                       </div>
                       <button type="button" className="link-arrow qd__remove" onClick={() => remove(i)}>
                         {t.remove}
