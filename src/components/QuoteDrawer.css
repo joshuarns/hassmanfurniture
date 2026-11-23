@@ -1,21 +1,24 @@
 .qd {
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 36px;
 }
 .qd__title {
-  font-size: 34px;
+  font-size: clamp(44px, 5vw, 64px);
 }
 .qd__sent {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 28px;
+  gap: 32px;
   color: var(--body);
 }
 .qd__empty {
-  padding: 20px;
+  padding: 28px;
   background: var(--cream);
+  font-family: var(--font-display);
+  font-size: 22px;
+  line-height: 1.35;
   color: var(--body);
 }
 .qd__items {
@@ -27,13 +30,13 @@
 .qd__item {
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 14px 0;
+  gap: 18px;
+  padding: 18px 0;
   border-bottom: 1px solid var(--line);
 }
 .qd__thumb {
-  width: 64px;
-  height: 64px;
+  width: 76px;
+  height: 92px;
   flex: none;
 }
 .qd__info {
@@ -41,11 +44,12 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
+  gap: 2px;
 }
 .qd__name {
   font-family: var(--font-display);
-  font-size: 20px;
-  letter-spacing: -0.02em;
+  font-size: 28px;
+  line-height: 1.05;
 }
 .qd__detail {
   font-size: 12px;
@@ -56,18 +60,23 @@
   padding: 0;
   background: none;
   border: 0;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--muted);
   cursor: pointer;
 }
 .qd__remove:hover {
-  color: var(--accent);
+  color: var(--ink);
 }
 .qd__form {
   display: flex;
   flex-direction: column;
-  gap: 22px;
+  gap: 26px;
   padding-bottom: 8px;
 }
 .qd__submit {
   width: 100%;
-  margin-top: 6px;
+  margin-top: 8px;
 }

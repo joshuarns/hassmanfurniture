@@ -106,3 +106,51 @@ Object.assign(T.en, {
 // Ficha técnica por producto (modelos, colores, PDF).
 Object.assign(T.es, { model: 'Modelo', color: 'Color', sheet_pdf: 'Descargar ficha técnica (PDF)', sheet: 'Ficha técnica' })
 Object.assign(T.en, { model: 'Model', color: 'Colour', sheet_pdf: 'Download data sheet (PDF)', sheet: 'Data sheet' })
+
+// Rediseño de alto lujo. `*palabra*` se muestra en itálica.
+Object.assign(T.es, {
+  appointment: 'Cita privada', selection: 'Selección', close: 'Cerrar',
+  hero_kicker: 'Mobiliario de autor', hero_l1: 'El arte', hero_l2: 'de *habitar*.',
+  hero_body: 'Piezas para corporativos, hoteles y residencias privadas — especificadas a la medida y entregadas con cuidado.',
+  hero_cta: 'Descubrir colecciones', scroll: 'Desliza',
+  house: 'La casa',
+  coll_kicker: 'Colecciones', coll_l1: 'Ocho familias,', coll_l2: 'una sola *mirada*.', drag: 'Ver',
+  tad_kicker: 'Pieza insignia', tad_l2: 'reducida a lo *esencial*.', tad_cta: 'Descubrir Tad',
+  frames_n: (n) => n + ' estructuras', uphs_n: (n) => n + ' tapicerías', made_to_order: 'Bajo pedido',
+  sel_kicker: 'La selección', sel_l1: 'Lo más nuevo', sel_l2: 'en *sillería*.', discover: 'Descubrir',
+  mat_kicker: 'Materia', mat_l1: 'A la medida', mat_l2: 'de *cada espacio*.',
+  mat_body: 'Cada colección se ofrece en distintas estructuras y tapicerías, para que una misma pieza pase de la sala de consejo al lobby de un hotel sin perder su carácter.',
+  frames_label: 'Estructuras', uphs_label: 'Tapicerías',
+  sectors_kicker: 'Proyectos',
+  visit_kicker: 'Atención privada', visit_l1: 'Una cita', visit_l2: 'a tu *medida*.',
+  visit_body: 'Nuestro equipo te acompaña en la selección de modelos, acabados y precios para tu proyecto.',
+  visit_cta: 'Solicitar cita', catalogue_cta: 'Solicitar catálogo 2026',
+  coll_page_l1: 'Las', coll_page_l2: '*colecciones*',
+  pieces_n: (n) => n + (n === 1 ? ' pieza' : ' piezas'),
+  add_sel: 'Añadir a mi selección', advisor: 'Hablar con un asesor', added_sel: 'Añadido a tu selección',
+  view_sel: 'Ver selección', your_sel: 'Tu selección', prev: 'Anterior', next: 'Siguiente',
+  menu_explore: 'Explorar', menu_house: 'La casa',
+})
+Object.assign(T.en, {
+  appointment: 'Private appointment', selection: 'Selection', close: 'Close',
+  hero_kicker: 'Signature furniture', hero_l1: 'The art', hero_l2: 'of *living*.',
+  hero_body: 'Pieces for headquarters, hotels and private residences — specified to order and delivered with care.',
+  hero_cta: 'Discover the collections', scroll: 'Scroll',
+  house: 'The house',
+  coll_kicker: 'Collections', coll_l1: 'Eight families,', coll_l2: 'one *vision*.', drag: 'View',
+  tad_kicker: 'Signature piece', tad_l2: 'refined to the *essential*.', tad_cta: 'Discover Tad',
+  frames_n: (n) => n + ' frames', uphs_n: (n) => n + ' upholsteries', made_to_order: 'Made to order',
+  sel_kicker: 'The selection', sel_l1: 'The latest', sel_l2: 'in *seating*.', discover: 'Discover',
+  mat_kicker: 'Materials', mat_l1: 'Made to measure', mat_l2: 'for *every space*.',
+  mat_body: 'Every collection is offered in a range of frames and upholsteries, so a single piece can move from the boardroom to a hotel lobby without losing its character.',
+  frames_label: 'Frames', uphs_label: 'Upholsteries',
+  sectors_kicker: 'Projects',
+  visit_kicker: 'Private service', visit_l1: 'An appointment', visit_l2: 'made for *you*.',
+  visit_body: 'Our team guides you through models, finishes and pricing for your project.',
+  visit_cta: 'Request an appointment', catalogue_cta: 'Request the 2026 catalogue',
+  coll_page_l1: 'The', coll_page_l2: '*collections*',
+  pieces_n: (n) => n + (n === 1 ? ' piece' : ' pieces'),
+  add_sel: 'Add to my selection', advisor: 'Speak to an advisor', added_sel: 'Added to your selection',
+  view_sel: 'View selection', your_sel: 'Your selection', prev: 'Previous', next: 'Next',
+  menu_explore: 'Explore', menu_house: 'The house',
+})

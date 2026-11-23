@@ -1,8 +1,10 @@
 # Hassman Furniture
 
 Sitio de catálogo con solicitud de cotización, bilingüe (ES/EN). React 19 + Vite + React Router.
-Diseño en la línea de Indigoff: blanco, tinta `#111` y crema `#f4f1eb`, cero radios, Archivo ligero para títulos,
-IBM Plex Sans para texto y Jost en versalitas para la interfaz.
+Dirección de arte de alto lujo en blanco y negro: Cormorant Garamond monumental para titulares,
+Inter Tight en versalitas para la interfaz y movimiento cinematográfico con GSAP + Lenis
+(intro, revelados por línea, parallax, galería horizontal fijada y cursor con etiqueta).
+Todo el movimiento se desactiva si el sistema pide "reducir movimiento".
 
 ```bash
 npm install
@@ -84,7 +86,9 @@ db/             esquema SQL
 scripts/        db-setup.js
 src/
   admin/        panel /admin (listado, editor, imágenes, importador de fichas)
-  components/   Header, MenuDrawer, Drawer, Footer, QuoteDrawer, ProductCard, CategoryPanel
+  components/   Header, MenuOverlay, Intro, Cursor, SmoothScroll, Lines, Drawer, Footer, QuoteDrawer, ProductCard
+  hooks/        useReveals (animaciones con data-reveal / data-parallax), useLockBody
+  lib/          motion.js (GSAP, ScrollTrigger, Lenis), rich.jsx (*itálicas* en textos)
   pages/        Home, Collections, Category, Product, NotFound
   context/      idioma, catálogo (CatalogProvider) y cotización
   data/         catálogo editable

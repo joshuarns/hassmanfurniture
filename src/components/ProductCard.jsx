@@ -1,25 +1,25 @@
 import { Link } from 'react-router-dom'
-import { framesOf } from '../data/catalog'
+import { findCategory, framesOf } from '../data/catalog'
 import { useLang } from '../context/lang'
 import './ProductCard.css'
 
-// `variant`: 'grid' (pie en versalitas, como las grillas de Indigoff) o 'feature' (nombre grande + acabados).
-export default function ProductCard({ product, variant = 'grid' }) {
-  const { t } = useLang()
+// Tarjeta de producto editorial: imagen 3:4, nombre en serif y dato en versalitas.
+export default function ProductCard({ product, index }) {
+  const { t, label } = useLang()
+  const cat = findCategory(product.cat)
 
   return (
-    <Link to={`/producto/${product.id}`} className={`pc pc--${variant} zoom`}>
-      <div className="ph pc__img">
+    <Link to={`/producto/${product.id}`} className="pc" data-cursor={t.discover}>
+      <div className="ph pc__img zoom">
         <img src={product.imgs[0]} alt={product.name} loading="lazy" />
       </div>
-      {variant === 'feature' ? (
-        <div className="pc__info">
-          <span className="pc__name">{product.name}</span>
-          <span className="pc__sub">{t.finishes(framesOf(product).length)}</span>
-        </div>
-      ) : (
-        <span className="pc__caption">{product.name}</span>
-      )}
+      <div className="pc__info">
+        <span className="pc__name">
+          {index !== undefined && <span className="numeral pc__num">{String(index + 1).padStart(2, '0')}</span>}
+          {product.name}
+        </span>
+        <span className="pc__sub caps muted">{cat ? label(cat) : t.finishes(framesOf(product).length)}</span>
+      </div>
     </Link>
   )
 }

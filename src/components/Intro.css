@@ -1,0 +1,42 @@
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  background: var(--dark);
+  color: var(--bg);
+}
+.intro__brand {
+  display: flex;
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(44px, 9vw, 132px);
+  line-height: 1;
+  letter-spacing: 0.18em;
+  margin-right: -0.18em;
+}
+.intro__mask {
+  display: inline-block;
+  overflow: hidden;
+  padding: 0.04em 0;
+}
+.intro__letter {
+  display: inline-block;
+}
+.intro__line {
+  width: min(240px, 40vw);
+  height: 1px;
+  background: currentColor;
+  opacity: 0.5;
+}
+.intro__tag {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--on-dark);
+}

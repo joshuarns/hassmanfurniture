@@ -1,57 +1,78 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Link, useLocation } from 'react-router-dom'
 import { LANGS } from '../i18n/translations'
 import { useLang } from '../context/lang'
 import { useQuote } from '../context/quote'
-import MenuDrawer from './MenuDrawer'
+import MenuOverlay from './MenuOverlay'
 import './Header.css'
 
+// Encabezado fijo: transparente sobre el hero de la portada, blanco al bajar,
+// y se oculta al desplazarse hacia abajo para dejar respirar las imágenes.
 export default function Header() {
   const { lang, setLang, t } = useLang()
   const quote = useQuote()
+  const { pathname } = useLocation()
   const [menu, setMenu] = useState(false)
+  const [solid, setSolid] = useState(false)
+  const [hidden, setHidden] = useState(false)
+  const overHero = pathname === '/'
+
+  useEffect(() => {
+    let last = window.scrollY
+    const onScroll = () => {
+      const y = window.scrollY
+      setSolid(y > (overHero ? window.innerHeight * 0.85 : 10))
+      setHidden(y > 240 && y > last + 2)
+      if (y < last - 2) setHidden(false)
+      last = y
+    }
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [overHero])
+
+  const tone = overHero && !solid ? 'hd--over' : 'hd--solid'
 
   return (
-    <header className="hd">
-      <div className="hd__bar">
-        <nav className="hd__side ui" aria-label="Principal">
-          <button type="button" className="hd__menu" aria-expanded={menu} onClick={() => setMenu(true)}>
-            <span className="hd__burger" aria-hidden="true">
-              <span />
-              <span />
-            </span>
-            {t.menu}
-          </button>
-          <Link to="/colecciones" className="hd__hide-sm">
-            {t.nav_collections}
+    <>
+      <header className={`hd ${tone} ${hidden && !menu ? 'hd--hidden' : ''}`}>
+        <div className="hd__bar">
+          <div className="hd__side">
+            <button type="button" className="hd__btn hd__menu" aria-expanded={menu} onClick={() => setMenu(true)}>
+              <span className="hd__burger" aria-hidden="true">
+                <span />
+                <span />
+              </span>
+              <span className="hd__label">{t.menu}</span>
+            </button>
+            <Link to="/colecciones" className="hd__btn hd__hide-md">
+              {t.nav_collections}
+            </Link>
+          </div>
+
+          <Link to="/" className="wordmark" aria-label="Hassman Furniture">
+            Hassman
           </Link>
-        </nav>
 
-        <Link to="/" className="brand" aria-label="Hassman Furniture">
-          HASSMAN
-        </Link>
-
-        <div className="hd__side hd__side--end ui">
-          <div className="hd__langs" role="group" aria-label="Idioma / Language">
-            {LANGS.map((l, i) => (
-              <span key={l}>
-                {i > 0 && <span className="hd__sep">·</span>}
-                <button type="button" aria-pressed={l === lang} onClick={() => setLang(l)}>
+          <div className="hd__side hd__side--end">
+            <div className="hd__langs hd__hide-sm" role="group" aria-label="Idioma / Language">
+              {LANGS.map((l) => (
+                <button key={l} type="button" className="hd__btn" aria-pressed={l === lang} onClick={() => setLang(l)}>
                   {l.toUpperCase()}
                 </button>
-              </span>
-            ))}
+              ))}
+            </div>
+            <button type="button" className="hd__btn hd__hide-md" onClick={quote.open}>
+              {t.appointment}
+            </button>
+            <button type="button" className="hd__btn" onClick={quote.open}>
+              <span className="hd__hide-sm">{t.selection}</span>
+              <span className="hd__count">{quote.count}</span>
+            </button>
           </div>
-          <Link to="/#contacto" className="hd__hide-sm">
-            {t.nav_contact}
-          </Link>
-          <button type="button" className="hd__quote" onClick={quote.open}>
-            {t.quote_btn} <span className="tnum">({quote.count})</span>
-          </button>
         </div>
-      </div>
-
-      {menu && <MenuDrawer onClose={() => setMenu(false)} />}
-    </header>
+      </header>
+      {menu && <MenuOverlay onClose={() => setMenu(false)} />}
+    </>
   )
 }

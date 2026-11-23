@@ -26,12 +26,12 @@ export default function QuoteDrawer() {
   return (
     <Drawer side="right" label={t.q_title} onClose={close} head={<span className="ui tnum">{t.pieces(count)}</span>}>
       <div className="dw__body qd">
-        <h2 className="qd__title">{sentTo !== null ? t.sent_title : t.q_title}</h2>
+        <h2 className="qd__title">{sentTo !== null ? t.sent_title : t.your_sel}</h2>
 
         {sentTo !== null ? (
           <div className="qd__sent">
             <p>{t.sent_body(sentTo)}</p>
-            <button type="button" className="btn btn--outline" onClick={close}>
+            <button type="button" className="btn btn--ghost" onClick={close}>
               {t.close}
             </button>
           </div>
@@ -56,7 +56,7 @@ export default function QuoteDrawer() {
                         <span className="qd__name">{p.name}</span>
                         <span className="qd__detail">{detail}</span>
                       </div>
-                      <button type="button" className="link-arrow qd__remove" onClick={() => remove(i)}>
+                      <button type="button" className="qd__remove" onClick={() => remove(i)}>
                         {t.remove}
                       </button>
                     </li>
@@ -68,6 +68,7 @@ export default function QuoteDrawer() {
             )}
 
             <form className="qd__form" onSubmit={onSubmit}>
+              <p className="caps muted">{t.q_title}</p>
               <div className="field">
                 <label htmlFor="q-name">{t.name}</label>
                 <input id="q-name" className="input" name="name" autoComplete="name" required />

@@ -1,16 +1,18 @@
 .dw-back {
   position: fixed;
   inset: 0;
-  z-index: 80;
-  background: rgba(17, 17, 17, 0.38);
-  animation: dw-fade 0.35s ease;
+  z-index: 90;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  animation: dw-fade 0.6s var(--ease);
 }
 .dw {
   position: fixed;
   top: 0;
   bottom: 0;
-  z-index: 81;
-  width: min(460px, 100%);
+  z-index: 91;
+  width: min(560px, 100%);
   display: flex;
   flex-direction: column;
   overflow-y: auto;
@@ -23,14 +25,11 @@
 }
 .dw--left {
   left: 0;
-  box-shadow: 24px 0 48px -32px rgba(17, 17, 17, 0.4);
-  animation: dw-in-left 0.5s var(--ease);
+  animation: dw-in-left 0.9s var(--ease-lux);
 }
 .dw--right {
   right: 0;
-  width: min(520px, 100%);
-  box-shadow: -24px 0 48px -32px rgba(17, 17, 17, 0.4);
-  animation: dw-in-right 0.5s var(--ease);
+  animation: dw-in-right 0.9s var(--ease-lux);
 }
 @keyframes dw-fade {
   from {
@@ -47,20 +46,19 @@
     transform: translateX(100%);
   }
 }
-
 .dw__head {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  min-height: 72px;
-  padding: 0 32px;
+  min-height: var(--header-h);
+  padding: 0 40px;
   border-bottom: 1px solid var(--line);
 }
 .dw__close {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   min-height: 44px;
   padding: 0;
   background: none;
@@ -68,21 +66,27 @@
   cursor: pointer;
 }
 .dw__close span {
-  font-size: 18px;
-  font-weight: 400;
+  font-size: 20px;
+  font-weight: 300;
   line-height: 1;
 }
 .dw__close:hover {
-  color: var(--accent);
+  opacity: 0.6;
 }
 .dw__body {
-  padding: 32px;
+  padding: 40px;
 }
-
+.ui {
+  font-family: var(--font-ui);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}
 @media (max-width: 520px) {
   .dw__head,
   .dw__body {
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-left: 22px;
+    padding-right: 22px;
   }
 }

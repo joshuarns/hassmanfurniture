@@ -1,9 +1,12 @@
 import { Suspense, lazy } from 'react'
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes, useLocation } from 'react-router-dom'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import QuoteDrawer from './components/QuoteDrawer'
 import ScrollManager from './components/ScrollManager'
+import SmoothScroll from './components/SmoothScroll'
+import Intro from './components/Intro'
+import Cursor from './components/Cursor'
 import Home from './pages/Home'
 import Collections from './pages/Collections'
 import Category from './pages/Category'
@@ -34,15 +37,19 @@ export default function App() {
 function Site() {
   const { t } = useLang()
   const { isOpen } = useQuote()
+  const { pathname } = useLocation()
 
   return (
     <>
+      <Intro />
+      <SmoothScroll />
+      <Cursor />
       <a href="#contenido" className="skip">
         {t.skip}
       </a>
       <ScrollManager />
       <Header />
-      <main id="contenido">
+      <main id="contenido" key={pathname} className="page-enter">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/colecciones" element={<Collections />} />

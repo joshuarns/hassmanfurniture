@@ -1,55 +1,81 @@
 .pc {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 20px;
 }
 .pc__img {
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 3 / 4;
 }
-.pc__caption {
-  text-align: center;
-  font-family: var(--font-ui);
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
+.pc__img img {
+  transition: transform 1.6s var(--ease), filter 1s var(--ease);
+}
+.pc:hover .pc__img img {
+  transform: scale(1.05);
 }
 .pc__info {
+  position: relative;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-  text-align: center;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 14px;
+}
+.pc__info::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--ink);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 1s var(--ease-lux);
+}
+.pc:hover .pc__info::after {
+  transform: none;
 }
 .pc__name {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
   font-family: var(--font-display);
   font-weight: 300;
-  font-size: 24px;
-  letter-spacing: -0.03em;
+  font-size: clamp(26px, 2.2vw, 34px);
+  line-height: 1;
 }
-.pc__sub {
-  font-size: 13px;
+.pc__num {
+  font-size: 0.55em;
   color: var(--muted);
 }
+.pc__sub {
+  font-size: 9.5px;
+  white-space: nowrap;
+}
 
-/* Grillas */
+/* Grilla de productos */
 .grid-products {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 48px var(--gap);
+  gap: 72px var(--gap);
 }
-.grid-products--5 {
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 40px var(--gap);
+.grid-products--3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 88px 24px;
 }
 @media (max-width: 1100px) {
-  .grid-products--5 {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+  .grid-products {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
-@media (max-width: 900px) {
+@media (max-width: 800px) {
   .grid-products,
-  .grid-products--5 {
+  .grid-products--3 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 48px var(--gap);
+  }
+  .pc__info {
+    flex-direction: column;
+    gap: 6px;
   }
 }
